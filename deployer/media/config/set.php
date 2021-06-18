@@ -140,3 +140,11 @@ set('media_rsync_flags', function () {
 set('local/bin/deployer', function () {
     return './vendor/bin/dep';
 });
+
+set('media_storage_path_relative', '.dep/media/dumps');
+
+set('media_storage_path_local', function () {
+    $mediaStoragePathLocal = get('deploy_path') . '/' . get('media_storage_path_relative');
+    runLocally('[ -d ' . $mediaStoragePathLocal . ' ] || mkdir -p ' . $mediaStoragePathLocal);
+    return $mediaStoragePathLocal;
+});
