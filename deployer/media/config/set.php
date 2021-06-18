@@ -148,3 +148,7 @@ set('media_storage_path_local', function () {
     runLocally('[ -d ' . $mediaStoragePathLocal . ' ] || mkdir -p ' . $mediaStoragePathLocal);
     return $mediaStoragePathLocal;
 });
+
+set('local/bin/tar', function () {
+    return locateLocalBinaryPath('tar');
+});
