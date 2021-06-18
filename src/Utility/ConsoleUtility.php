@@ -2,7 +2,9 @@
 
 namespace SourceBroker\DeployerExtendedMedia\Utility;
 
+use Symfony\Component\Console\Output\OutputInterface;
 use function Deployer\input;
+use function Deployer\output;
 
 /**
  * Class ConsoleUtility
@@ -11,6 +13,34 @@ use function Deployer\input;
  */
 class ConsoleUtility
 {
+
+    /**
+     * Returns OutputInterface verbosity as parameter that can be used in cli command
+     *
+     * @return string
+     */
+    public function getVerbosityAsParameter()
+    {
+        switch (output()->getVerbosity()) {
+            case OutputInterface::VERBOSITY_DEBUG:
+                $verbosity = ' -vvv';
+                break;
+            case OutputInterface::VERBOSITY_VERY_VERBOSE:
+                $verbosity = ' -vv';
+                break;
+            case OutputInterface::VERBOSITY_VERBOSE:
+                $verbosity = ' -v';
+                break;
+            case OutputInterface::VERBOSITY_QUIET:
+                $verbosity = ' -q';
+                break;
+            case OutputInterface::VERBOSITY_NORMAL:
+            default:
+                $verbosity = '';
+        }
+        return $verbosity;
+    }
+
     /**
      * Check if option is present and return it. If not throw exception.
      *
@@ -43,5 +73,23 @@ class ConsoleUtility
             throw new \InvalidArgumentException('No `--options=' . $optionToFind . ':value` set.', 1458937128560);
         }
         return $optionReturnValue;
+    }
+
+    public function getOptionsForCliUsage(array $optionsToSet)
+    {
+        $getOptionsForCliUsage = '';
+        $getOptionsForCliUsageArray = [];
+        foreach ($optionsToSet as $optionToSetKey => $optionToSetValue) {
+            if ($optionToSetValue === true) {
+                $optionToSetValue = 'true';
+            } elseif ($optionToSetValue === false) {
+                $optionToSetValue = 'false';
+            }
+            $getOptionsForCliUsageArray[] = $optionToSetKey . ':' . $optionToSetValue;
+        }
+        return $getOptionsForCliUsage . (!empty($getOptionsForCliUsageArray) ? '--options=' . implode(
+                    ',',
+                    $getOptionsForCliUsageArray
+                ) : '');
     }
 }

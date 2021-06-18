@@ -24,6 +24,7 @@ task('media:export', function () {
 
         $folderParts = [
             'dateTime' => date('Y-m-d_H-i-s'),
+            'server' => 'server=' . $fileUtility->normalizeFilename(get('default_stage')),
             'dumpcode' => 'dumpcode=' . $fileUtility->normalizeFilename($dumpCode),
         ];
 
