@@ -27,7 +27,7 @@ task('media:export', function () {
             'dumpcode' => 'dumpcode=' . $fileUtility->normalizeFilename($dumpCode),
         ];
 
-        $sourceDir = get('deploy_path') . '/' . (testLocally('[ -L {{deploy_path}}/release ]') ? 'release' : 'current');
+        $sourceDir = !empty($_ENV['IS_DDEV_PROJECT']) ? '.' : get('deploy_path') . '/' . (testLocally('[ -L {{deploy_path}}/release ]') ? 'release' : 'current');
 
         $targetDir = get('media_storage_path_local') . '/' . implode('#', $folderParts) . '/';
 
